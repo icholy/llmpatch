@@ -3,7 +3,6 @@ package llmpatch
 import (
 	"bufio"
 	_ "embed"
-	"fmt"
 	"strings"
 )
 
