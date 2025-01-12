@@ -17,11 +17,11 @@ func main() {
 	flag.StringVar(&filename, "f", "", "file to edit")
 	flag.Parse()
 	if filename == "" {
-		fmt.Fprintf(os.Stderr, "expected -f flag")
+		fmt.Fprintf(os.Stderr, "expected -f flag\n")
 		os.Exit(1)
 	}
 	if flag.NArg() == 0 {
-		fmt.Fprintf(os.Stderr, "expected positional args")
+		fmt.Fprintf(os.Stderr, "expected positional args\n")
 		os.Exit(1)
 	}
 	// create the prompt
