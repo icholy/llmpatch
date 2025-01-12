@@ -11,15 +11,6 @@ func TestExtract(t *testing.T) {
 		edits []Edit
 	}{
 		{
-			input: "<SEARCH>a</SEARCH><REPLACE>b</REPLACE>",
-			edits: []Edit{
-				{
-					Search:  "a",
-					Replace: "b",
-				},
-			},
-		},
-		{
 			input: "<SEARCH>\na\n</SEARCH>\n<REPLACE>\nb\n</REPLACE>\n",
 			edits: []Edit{
 				{

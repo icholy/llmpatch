@@ -3,6 +3,7 @@ package llmpatch
 import (
 	"bufio"
 	_ "embed"
+	"fmt"
 	"strings"
 )
 
@@ -36,7 +37,7 @@ func Extract(s string) []Edit {
 			edits = append(edits, edit)
 		}
 	}
-	return nil
+	return edits
 }
 
 func scanUntil(scanner *bufio.Scanner, stop string) (string, bool) {
@@ -46,8 +47,10 @@ func scanUntil(scanner *bufio.Scanner, stop string) (string, bool) {
 		if strings.TrimSpace(line) == stop {
 			return text.String(), true
 		}
+		if text.Len() > 0 {
+			_ = text.WriteByte('\n')
+		}
 		_, _ = text.WriteString(line)
-		_ = text.WriteByte('\n')
 	}
 	return "", false
 }
