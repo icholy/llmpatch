@@ -1,7 +1,9 @@
 package llmpatch
 
+import "strings"
+
 type Edit struct {
-	Search string
+	Search  string
 	Replace string
 }
 
@@ -9,11 +11,20 @@ func Extract(s string) []Edit {
 	var edits []Edit
 	for {
 		var edit Edit
-		_, s = strings.Cut(s, "<SEARCH>")
-		edit.Search, s = strings.Cut(s, "</SEARCH>")
-		_, s = strings.Cut("<REPLACE>")
-		edit.Replace, s = strings.Cut("</REPLACE>")
-		if s.Search != "" {
+		var ok bool
+		if _, s, ok = strings.Cut(s, "<SEARCH>"); !ok {
+			break
+		}
+		if edit.Search, s, ok = strings.Cut(s, "</SEARCH>"); !ok {
+			break
+		}
+		if _, s, ok = strings.Cut(s, "<REPLACE>"); !ok {
+			break
+		}
+		if edit.Replace, s, ok = strings.Cut(s, "</REPLACE>"); !ok {
+			break
+		}
+		if edit.Search != "" {
 			edits = append(edits, edit)
 		}
 	}
