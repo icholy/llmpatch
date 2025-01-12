@@ -1,6 +1,12 @@
 package llmpatch
 
-import "strings"
+import (
+	_ "embed"
+	"strings"
+)
+
+//go:embed prompt.md
+var Prompt string
 
 type Edit struct {
 	Search  string
