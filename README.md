@@ -2,6 +2,12 @@
 
 > Tool for modifying individual files using an LLM
 
+### Install
+
+``` sh
+go install github.com/icholy/llmpatch/cmd/llmpatch@latest
+```
+
 ### Usage:
 
 ``` sh
