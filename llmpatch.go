@@ -10,11 +10,13 @@ import (
 //go:embed prompt.md
 var Prompt string
 
+// Edit describes a code edit made by an LLM.
 type Edit struct {
 	Search  string
 	Replace string
 }
 
+// Extract code edits from an LLM response.
 func Extract(s string) []Edit {
 	var edits []Edit
 	scanner := bufio.NewScanner(strings.NewReader(s))
@@ -40,6 +42,21 @@ func Extract(s string) []Edit {
 	return edits
 }
 
+// Apply the edits to s and return the result.
+func Apply(s string, edits []Edit) string {
+	lines := splitLines(s)
+	for _, e := range edits {
+		search := splitLines(e.Search)
+		if index := sliceIndex(lines, search); index >= 0 {
+			lines = slices.Replace(lines, index, index+len(search), e.Replace)
+		}
+	}
+	if strings.HasSuffix(s, "\n") {
+		return strings.Join(lines, "\n") + "\n"
+	}
+	return strings.Join(lines, "\n")
+}
+
 func scanUntil(scanner *bufio.Scanner, stop string) (string, bool) {
 	var text strings.Builder
 	for scanner.Scan() {
@@ -53,20 +70,6 @@ func scanUntil(scanner *bufio.Scanner, stop string) (string, bool) {
 		_, _ = text.WriteString(line)
 	}
 	return "", false
-}
-
-func Apply(s string, edits []Edit) string {
-	lines := splitLines(s)
-	for _, e := range edits {
-		search := splitLines(e.Search)
-		if index := sliceIndex(lines, search); index >= 0 {
-			lines = slices.Replace(lines, index, index+len(search), e.Replace)
-		}
-	}
-	if strings.HasSuffix(s, "\n") {
-		return strings.Join(lines, "\n") + "\n"
-	}
-	return strings.Join(lines, "\n")
 }
 
 func splitLines(s string) []string {
