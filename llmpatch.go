@@ -63,6 +63,9 @@ func Apply(s string, edits []Edit) string {
 			lines = slices.Replace(lines, index, index+len(search), e.Replace)
 		}
 	}
+	if strings.HasSuffix(s, "\n") {
+		return strings.Join(lines, "\n") + "\n"
+	}
 	return strings.Join(lines, "\n")
 }
 

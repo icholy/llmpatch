@@ -93,11 +93,15 @@ func TestApply(t *testing.T) {
 			},
 			want: "1\nb\nb",
 		},
+		{
+			input: "a\n",
+			want:  "a\n",
+		},
 	}
 	for _, tt := range tests {
 		t.Run("", func(t *testing.T) {
 			if got := Apply(tt.input, tt.edits); got != tt.want {
-				t.Fatalf("got %v, want %v", got, tt.want)
+				t.Fatalf("got %q, want %q", got, tt.want)
 			}
 		})
 	}
