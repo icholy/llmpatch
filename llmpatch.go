@@ -56,10 +56,23 @@ func scanUntil(scanner *bufio.Scanner, stop string) (string, bool) {
 }
 
 func Apply(s string, edits []Edit) string {
+	lines := splitLines(s)
 	for _, e := range edits {
-		s = strings.ReplaceAll(s, e.Search, e.Replace)
+		search := splitLines(e.Search)
+		if index := sliceIndex(lines, search); index >= 0 {
+			lines = slices.Replace(lines, index, index+len(search), e.Replace)
+		}
 	}
-	return s
+	return strings.Join(lines, "\n")
+}
+
+func splitLines(s string) []string {
+	var lines []string
+	scanner := bufio.NewScanner(strings.NewReader(s))
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines
 }
 
 func sliceIndex(s []string, search []string) int {
