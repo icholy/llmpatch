@@ -19,6 +19,15 @@ func TestExtract(t *testing.T) {
 				},
 			},
 		},
+		{
+			input: "<SEARCH>\na\n</SEARCH>\n<REPLACE>\nb\n</REPLACE>\n",
+			edits: []Edit{
+				{
+					Search:  "a",
+					Replace: "b",
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run("", func(t *testing.T) {
