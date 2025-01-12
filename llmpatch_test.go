@@ -66,3 +66,29 @@ func TestSliceIndex(t *testing.T) {
 		})
 	}
 }
+
+func TestApply(t *testing.T) {
+	tests := []struct {
+		input string
+		edits []Edit
+		want  string
+	}{
+		{
+			input: "a",
+			edits: []Edit{
+				{
+					Search:  "a",
+					Replace: "b",
+				},
+			},
+			want: "b",
+		},
+	}
+	for _, tt := range tests {
+		t.Run("", func(t *testing.T) {
+			if got := Apply(tt.input, tt.edits); got != tt.want {
+				t.Fatalf("got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
