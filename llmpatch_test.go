@@ -83,6 +83,16 @@ func TestApply(t *testing.T) {
 			},
 			want: "b",
 		},
+		{
+			input: "1\na\na",
+			edits: []Edit{
+				{
+					Search:  "a\na",
+					Replace: "b\nb",
+				},
+			},
+			want: "1\nb\nb",
+		},
 	}
 	for _, tt := range tests {
 		t.Run("", func(t *testing.T) {
