@@ -15,16 +15,14 @@ import (
 func main() {
 	var filename string
 	flag.StringVar(&filename, "f", "", "file to edit")
-	flag.Parse()
-	if filename == "" {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage: %s -f <filename> <llm command> [args...]\n", os.Args[0])
 		flag.PrintDefaults()
-		fmt.Fprintf(os.Stderr, "expected -f flag\n")
 		os.Exit(1)
 	}
-	if flag.NArg() == 0 {
-		flag.PrintDefaults()
-		fmt.Fprintf(os.Stderr, "expected positional args\n")
-		os.Exit(1)
+	flag.Parse()
+	if filename == "" || flag.NArg() == 0 {
+		flag.Usage()
 	}
 	// create the prompt
 	data, err := os.ReadFile(filename)
