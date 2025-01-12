@@ -30,7 +30,7 @@ func main() {
 		log.Fatal(err)
 	}
 	code := string(data)
-	prompt := fmt.Sprintf("%s\n---\nCode:\n\n%s", llmpatch.Prompt, code)
+	prompt := fmt.Sprintf("%s\n---\nCode:\n\n%s\n", llmpatch.Prompt, code)
 	// run it through the llm
 	var output strings.Builder
 	cmd := exec.Command(flag.Arg(0), flag.Args()[1:]...)
