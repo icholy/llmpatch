@@ -1,6 +1,7 @@
 package llmpatch
 
 import (
+	"bufio"
 	_ "embed"
 	"strings"
 )
@@ -15,26 +16,40 @@ type Edit struct {
 
 func Extract(s string) []Edit {
 	var edits []Edit
+	scanner := bufio.NewScanner(strings.NewReader(s))
 	for {
-		var edit Edit
 		var ok bool
-		if _, s, ok = strings.Cut(s, "<SEARCH>"); !ok {
+		var edit Edit
+		if _, ok = scanUntil(scanner, "<SEARCH>"); !ok {
 			break
 		}
-		if edit.Search, s, ok = strings.Cut(s, "</SEARCH>"); !ok {
+		if edit.Search, ok = scanUntil(scanner, "</SEARCH>"); !ok {
 			break
 		}
-		if _, s, ok = strings.Cut(s, "<REPLACE>"); !ok {
+		if _, ok = scanUntil(scanner, "<REPLACE>"); !ok {
 			break
 		}
-		if edit.Replace, s, ok = strings.Cut(s, "</REPLACE>"); !ok {
+		if edit.Replace, ok = scanUntil(scanner, "</REPLACE>"); !ok {
 			break
 		}
 		if edit.Search != "" {
 			edits = append(edits, edit)
 		}
 	}
-	return edits
+	return nil
+}
+
+func scanUntil(scanner *bufio.Scanner, stop string) (string, bool) {
+	var text strings.Builder
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.TrimSpace(line) == stop {
+			return text.String(), true
+		}
+		_, _ = text.WriteString(line)
+		_ = text.WriteByte('\n')
+	}
+	return "", false
 }
 
 func Apply(s string, edits []Edit) string {
