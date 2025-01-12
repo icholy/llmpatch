@@ -29,3 +29,40 @@ func TestExtract(t *testing.T) {
 		})
 	}
 }
+
+func TestSliceIndex(t *testing.T) {
+	tests := []struct {
+		s      []string
+		search []string
+		index  int
+	}{
+		{
+			s:      []string{"a"},
+			search: []string{"a"},
+			index:  0,
+		},
+		{
+			s:      []string{"b", "b", "c", "c"},
+			search: []string{"c", "c"},
+			index:  2,
+		},
+		{
+			s:      []string{"b", "b", "c", "c"},
+			search: []string{"a", "a"},
+			index:  -1,
+		},
+		{
+			s:      []string{"b", "b", "c", "c"},
+			search: []string{"b", "b"},
+			index:  0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run("", func(t *testing.T) {
+			got := sliceIndex(tt.s, tt.search)
+			if got != tt.index {
+				t.Fatalf("got %v, want %v", got, tt.index)
+			}
+		})
+	}
+}

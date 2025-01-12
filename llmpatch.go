@@ -3,6 +3,7 @@ package llmpatch
 import (
 	"bufio"
 	_ "embed"
+	"slices"
 	"strings"
 )
 
@@ -59,4 +60,13 @@ func Apply(s string, edits []Edit) string {
 		s = strings.ReplaceAll(s, e.Search, e.Replace)
 	}
 	return s
+}
+
+func sliceIndex(s []string, search []string) int {
+	for i := 0; i <= len(s)-len(search); i++ {
+		if slices.Equal(s[i:i+len(search)], search) {
+			return i
+		}
+	}
+	return -1
 }
